@@ -52,6 +52,16 @@ comp_day = {"minute": 0, "hour": 0}
 comp_month = {"minute": 0, "hour": 0, "day": 1}
 comp_year = {"minute": 0, "hour": 0, "day": 1, "month": 1}
 
+__readonly_properties__ = [
+    "xattr",
+    "dnodesize",
+    "aclmode",
+    "acltype",
+    "atime",
+    "relatime",
+    "volblocksize"
+]
+
 
 def __virtual__():
     if not __grains__.get("zfs_support"):
@@ -452,6 +462,8 @@ def _dataset_present(
                     name,
                     prop,
                 )
+                continue
+            elif prop in __readonly_properties__:
                 continue
 
             ## NOTE: compare current and wanted value
