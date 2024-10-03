@@ -490,7 +490,7 @@ def _dataset_present(
         ## NOTE: update comment
         if ret["result"] and name in ret["changes"]:
             ret["comment"] = f"{dataset_type} {name} was updated"
-        elif ret["result"]:
+        elif ret["result"] or not properties_update:
             ret["comment"] = f"{dataset_type} {name} is uptodate"
         else:
             ret["comment"] = f"{dataset_type} {name} failed to be updated"
