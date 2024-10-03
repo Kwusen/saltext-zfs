@@ -398,7 +398,6 @@ def _dataset_present(
     if volume_size:
         ## NOTE: add volsize to properties
         volume_size = saltext.zfs.utils.zfs.from_size(volume_size)
-        properties.update({"volsize": volume_size})
     # The sorted isn't necessary for proper behavior, but it helps for the unit
     # tests.
     propnames = ",".join(sorted(properties.keys()))
