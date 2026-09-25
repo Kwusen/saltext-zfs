@@ -122,6 +122,15 @@ class Local:
         """
         return self._env.get("PATH", "").split(os.pathsep)
 
+    def which(self, cmd):
+        """
+        Find `cmd` in $PATH.
+        """
+        res = shutil.which(cmd)
+        if not res:
+            raise CommandNotFound(cmd)
+        return Path(res)
+
     @contextmanager
     def cwd(self, path):
         """
@@ -263,13 +272,17 @@ class Command:
         return ret
 
 
+# Should be imported from here.
+local = Local()
+
+
 @dataclass(frozen=True)
 class LocalCommand(Command):
     """
     Command returned by Local()["some_command"]. Follows local contexts.
     """
 
-    _local: Local = field(kw_only=True, repr=False)
+    _local: Local = field(kw_only=True, repr=False, default=local)
 
     def _which(self, exe):
         return shutil.which(exe, path=self._local._env.get("PATH", ""))
@@ -280,7 +293,5 @@ class LocalCommand(Command):
         return base
 
 
-# Should be imported from here.
-local = Local()
 # We must assume git is installed
 git = local["git"]
